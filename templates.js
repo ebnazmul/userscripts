@@ -19,10 +19,7 @@
 
   { "name": "fixed_en",          "value": "The issue has been resolved. Please check and confirm from your side.",       "color": "#10b981", "label": "Issue Fixed",   "icon": "✅", "group": "Fix"      },
   { "name": "fixed_bn",          "value": "সমস্যাটি সমাধান করা হয়েছে। চেক করে জানান।",                               "color": "#10b981", "label": "Issue Fixed",   "icon": "✅", "group": "Fix"      },
-
-  { "name": "refund_en",         "value": "I'll process your refund within 3–5 business days.",                          "color": "#a855f7", "label": "Refund",        "icon": "💸", "group": "Fix"      },
-  { "name": "refund_bn",         "value": "আপনার রিফান্ড ৩–৫ কার্যদিবসের মধ্যে প্রক্রিয়া করা হবে।",                  "color": "#a855f7", "label": "Refund",        "icon": "💸", "group": "Fix"      },
-
+  
   { "name": "escalate_en",       "value": "I'm escalating this issue to our technical team. We'll update you shortly.",  "color": "#ef4444", "label": "Escalate",      "icon": "🚨", "group": "Close"    },
   { "name": "escalate_bn",       "value": "আমি বিষয়টি আমাদের টেকনিক্যাল টিমে পাঠাচ্ছি। শীঘ্রই আপডেট জানানো হবে।", "color": "#ef4444", "label": "Escalate",      "icon": "🚨", "group": "Close"    },
 
