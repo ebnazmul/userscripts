@@ -1,129 +1,198 @@
 // ==UserScript==
-// @name         Anychat reply template - nazmul.fau
+// @name         Anychat Quick Replies - nazmul.fau
 // @namespace    http://tampermonkey.net/
-// @version      2026-04-24
-// @description  Just some predefined text to autofill at anychat.
+// @version      2026-04-26
+// @description  Quick replies for Anychat — driven by templates.js
 // @author       Nazmul Islam
 // @match        https://app.anychat.one/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
+
 (function () {
     'use strict';
 
-    const list = [
-  // 🔹 Greeting
-  { name: "hi_en", value: "Hello there, welcome to our chat support! How can I help you today?", color: "#4f8ef7" },
-  { name: "hi_bn", value: "হ্যালো, আমাদের চ্যাট সাপোর্টে আপনাকে স্বাগতম। আপনাকে কিভাবে সাহায্য করতে পারি?", color: "#e0634a" },
+    const INPUT_SEL = `textarea[placeholder="Type your message here"]`;
+    const TMPL_URL  = "https://raw.githubusercontent.com/ebnazmul/userscripts/refs/heads/master/templates.js";
 
-  // 🔹 Asking info
-  { name: "ask_details_en", value: "Could you please provide more details about the issue?", color: "#f59e0b" },
-  { name: "ask_details_bn", value: "দয়া করে সমস্যাটি সম্পর্কে আরও বিস্তারিত জানাবেন।", color: "#f59e0b" },
+    let templates = [];
+    let lang      = "en";
+    let open      = false;
 
-  { name: "ask_screenshot_en", value: "Can you please share a screenshot of the issue? That will help me understand better.", color: "#f97316" },
-  { name: "ask_screenshot_bn", value: "সমস্যাটির একটি স্ক্রিনশট শেয়ার করবেন? এতে বুঝতে সুবিধা হবে।", color: "#f97316" },
+    function parseName(name) {
+        const m = name.match(/^(.+)_(en|bn)$/);
+        return m ? { prefix: m[1], lang: m[2] } : null;
+    }
 
+    function getGrouped(query = "") {
+        const q = query.trim().toLowerCase();
+        const filtered = templates.filter(t => {
+            const p = parseName(t.name);
+            if (!p) return false;
+            if (lang !== "all" && p.lang !== lang) return false;
+            if (q) return (t.label + t.value + t.group).toLowerCase().includes(q);
+            return true;
+        });
 
-  { name: "hold_en", value: "Please give me a moment while I check this for you.", color: "#16a34a" },
-  { name: "hold_bn", value: "অনুগ্রহ করে একটু সময় দিন, আমি বিষয়টি যাচাই করছি।", color: "#16a34a" },
-
-
-  { name: "wait_en", value: "Thanks for your patience. I'm looking into this right now.", color: "#22c55e" },
-  { name: "wait_bn", value: "আপনার ধৈর্যের জন্য ধন্যবাদ। আমি বিষয়টি এখনও দেখছি।", color: "#22c55e" },
-
-
-  { name: "clear_cache_en", value: "Please try clearing your browser cache or use an incognito window and check again.", color: "#0ea5e9" },
-  { name: "clear_cache_bn", value: "অনুগ্রহ করে ব্রাউজারের ক্যাশ ক্লিয়ার করে অথবা ইনকগনিটো মোডে আবার চেষ্টা করুন।", color: "#0ea5e9" },
-
-
-  // 🔹 Resolution
-  { name: "fixed_en", value: "The issue has been resolved. Please check and confirm from your side.", color: "#10b981" },
-  { name: "fixed_bn", value: "সমস্যাটি সমাধান করা হয়েছে। অনুগ্রহ করে চেক করে জানান।", color: "#10b981" },
-
-  { name: "escalate_en", value: "I’m escalating this issue to our technical team. We’ll update you shortly.", color: "#ef4444" },
-  { name: "escalate_bn", value: "আমি বিষয়টি আমাদের টেকনিক্যাল টিমে পাঠাচ্ছি। শীঘ্রই আপডেট জানানো হবে।", color: "#ef4444" },
-
-
-
-  // 🔹 Closing
-  { name: "closing_en", value: "Is there anything else I can help you with today?", color: "#84cc16" },
-  { name: "closing_bn", value: "আজকে আর কোনো বিষয়ে কি আমি আপনাকে সাহায্য করতে পারি?", color: "#84cc16" },
-
-  { name: "bye_en", value: "Thank you for contacting us. Have a great day!", color: "#65a30d" },
-  { name: "bye_bn", value: "আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। আপনার দিনটি শুভ হোক!", color: "#65a30d" }
-];
-
-    const design = `
-    <div id="tmpl-panel" style="
-        position: fixed;
-        bottom: 20px;
-        right: 80px;
-        background: #1e1f26;
-        border: 1px solid #2e3040;
-        border-radius: 12px;
-        padding: 10px 10px 8px;
-        z-index: 9999;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-        min-width: 160px;
-        font-family: 'Segoe UI', sans-serif;
-    ">
-        <div style="
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #6b7280;
-            margin-bottom: 8px;
-            padding: 0 2px;
-        ">Quick Replies</div>
-        <div style="display: flex; flex-direction: column; gap: 6px;">
-            ${list.map(it => `
-                <button
-                    data-name="${it.name}"
-                    style="
-                        background: ${it.color}18;
-                        color: ${it.color};
-                        border: 1px solid ${it.color}44;
-                        border-radius: 8px;
-                        padding: 7px 12px;
-                        font-size: 12px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        text-align: left;
-                        transition: background 0.15s, transform 0.1s;
-                        letter-spacing: 0.02em;
-                    "
-                    onmouseover="this.style.background='${it.color}30'; this.style.transform='scale(1.02)'"
-                    onmouseout="this.style.background='${it.color}18'; this.style.transform='scale(1)'"
-                    onmousedown="this.style.transform='scale(0.97)'"
-                    onmouseup="this.style.transform='scale(1.02)'"
-                >${it.name}</button>
-            `).join("")}
-        </div>
-    </div>`;
-
-    document.body.insertAdjacentHTML("beforeend", design);
-
-    document.getElementById("tmpl-panel").addEventListener('click', (e) => {
-        const btn = e.target.closest("button[data-name]");
-        if (btn) {
-            const item = list.find(it => it.name === btn.dataset.name);
-            if (item) fillTextarea(`textarea[placeholder="Type your message here"]`, item.value);
+        const groups = {};
+        for (const t of filtered) {
+            const g = t.group ?? "Other";
+            (groups[g] ??= []).push(t);
         }
-    });
+        return groups;
+    }
 
-    function fillTextarea(selector, text) {
-        const el = document.querySelector(selector);
-        if (!el) return console.warn("Textarea not found");
+    function renderList(query = "") {
+        const list = document.getElementById("qr-list");
+        if (!list) return;
 
-        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-            window.HTMLTextAreaElement.prototype, 'value'
-        ).set;
+        const grouped = getGrouped(query);
 
-        nativeInputValueSetter.call(el, text);
-        el.dispatchEvent(new Event('input', { bubbles: true }));
+        if (!Object.keys(grouped).length) {
+            list.innerHTML = `<div style="font-size:11px;color:#6b7280;text-align:center;padding:10px 0;">No match</div>`;
+            return;
+        }
+
+        list.innerHTML = Object.entries(grouped).map(([g, items]) => `
+            <div style="font-size:9px;color:#4b5563;letter-spacing:.8px;text-transform:uppercase;margin:8px 0 3px;">${g}</div>
+            ${items.map(t => {
+                const p = parseName(t.name);
+                return `<button data-name="${t.name}" title="${t.value.replace(/"/g,"&quot;")}" style="
+                    display:block;width:100%;text-align:left;
+                    background:${t.color}18;color:${t.color};border:1px solid ${t.color}40;
+                    border-radius:6px;padding:6px 9px;font-size:11.5px;
+                    cursor:pointer;margin-bottom:4px;line-height:1.3;
+                ">${t.icon ?? "💬"} ${t.label ?? t.name}${lang === "all" ? ` <span style="opacity:.45;font-size:10px;">${p?.lang.toUpperCase()}</span>` : ""}</button>`;
+            }).join("")}
+        `).join("");
+    }
+
+    // ── Anychat uses a real <textarea> with React synthetic events ───────────
+    function fillInput(text) {
+        const el = document.querySelector(INPUT_SEL);
+        if (!el) return;
+        const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+        setter.call(el, text);
+        el.dispatchEvent(new Event('input',  { bubbles: true }));
         el.dispatchEvent(new Event('change', { bubbles: true }));
         el.focus();
     }
+
+    function buildPanel() {
+        const panel = document.createElement("div");
+        panel.id = "qr-panel";
+        Object.assign(panel.style, {
+            position:"fixed", bottom:"78px", right:"20px",
+            background:"#1a1b23", border:"1px solid #2e3040",
+            borderRadius:"14px", padding:"14px", zIndex:"999999",
+            boxShadow:"0 8px 32px rgba(0,0,0,0.35)", width:"230px",
+            fontFamily:"system-ui,sans-serif", display:"none",
+            maxHeight:"80vh", overflowY:"auto"
+        });
+
+        panel.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <span style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;">Quick Replies</span>
+                <div style="display:flex;gap:5px;align-items:center;">
+                    <div id="qr-lang" style="display:flex;background:#2a2b35;border-radius:6px;padding:2px;gap:2px;">
+                        ${["en","bn","all"].map(l => `
+                            <button data-lang="${l}" style="
+                                padding:3px 7px;border-radius:4px;border:none;font-size:10px;cursor:pointer;
+                                background:${l==="en"?"#4f46e5":"transparent"};
+                                color:${l==="en"?"white":"#9ca3af"};
+                            ">${l === "bn" ? "বাং" : l.toUpperCase()}</button>
+                        `).join("")}
+                    </div>
+                    <button id="qr-close" style="background:none;border:none;color:#6b7280;font-size:14px;cursor:pointer;">✕</button>
+                </div>
+            </div>
+            <input id="qr-search" placeholder="Search…" style="
+                width:100%;background:#2a2b35;border:1px solid #3e4050;border-radius:7px;
+                padding:5px 9px;font-size:11px;color:#e5e7eb;
+                box-sizing:border-box;margin-bottom:2px;outline:none;
+            "/>
+            <div id="qr-list"></div>
+        `;
+
+        panel.querySelector("#qr-close").addEventListener("click", toggle);
+
+        panel.querySelector("#qr-lang").addEventListener("click", e => {
+            const btn = e.target.closest("[data-lang]");
+            if (!btn) return;
+            lang = btn.dataset.lang;
+            panel.querySelectorAll("[data-lang]").forEach(b => {
+                b.style.background = b.dataset.lang === lang ? "#4f46e5" : "transparent";
+                b.style.color      = b.dataset.lang === lang ? "white"   : "#9ca3af";
+            });
+            renderList(panel.querySelector("#qr-search").value);
+        });
+
+        panel.querySelector("#qr-search").addEventListener("input", e => renderList(e.target.value));
+
+        panel.querySelector("#qr-list").addEventListener("click", e => {
+            const btn = e.target.closest("[data-name]");
+            if (!btn) return;
+            const t = templates.find(x => x.name === btn.dataset.name);
+            if (t) fillInput(t.value);
+        });
+
+        document.body.appendChild(panel);
+    }
+
+    function buildFab() {
+        const fab = document.createElement("button");
+        fab.id = "qr-fab";
+        fab.textContent = "💬";
+        fab.title = "Quick Replies";
+        Object.assign(fab.style, {
+            position:"fixed", bottom:"24px", right:"24px",
+            width:"44px", height:"44px", borderRadius:"50%",
+            background:"#4f46e5", border:"none", color:"white",
+            fontSize:"20px", cursor:"pointer", zIndex:"999999",
+            boxShadow:"0 4px 16px rgba(0,0,0,0.35)"
+        });
+        fab.addEventListener("click", toggle);
+        document.body.appendChild(fab);
+    }
+
+    function toggle() {
+        const panel = document.getElementById("qr-panel");
+        if (!panel) return;
+        open = !open;
+        panel.style.display = open ? "block" : "none";
+        if (open) {
+            const s = panel.querySelector("#qr-search");
+            s.value = "";
+            renderList();
+            s.focus();
+        }
+    }
+
+    function inject() {
+        if (document.getElementById("qr-fab")) return;
+        buildFab();
+        buildPanel();
+        renderList();
+    }
+
+    let debounce;
+    new MutationObserver(() => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+            if (!document.getElementById("qr-fab")) inject();
+        }, 400);
+    }).observe(document.body, { childList: true, subtree: false });
+
+    fetch(TMPL_URL + "?t=" + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            templates = data;
+            const check = setInterval(() => {
+                if (document.querySelector(INPUT_SEL)) {
+                    clearInterval(check);
+                    inject();
+                }
+            }, 500);
+        })
+        .catch(e => console.error("[QR]", e));
 
 })();
