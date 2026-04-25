@@ -1,4 +1,4 @@
-window.TAWK_TEMPLATES = [
+[
   { name: "hi_en", value: "Hello there, welcome to our chat support! How can I help you today?", color: "#4f8ef7" },
   { name: "hi_bn", value: "হ্যালো, আমাদের চ্যাট সাপোর্টে আপনাকে স্বাগতম। আপনাকে কিভাবে সাহায্য করতে পারি?", color: "#e0634a" },
 
