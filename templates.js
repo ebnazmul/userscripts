@@ -21,11 +21,11 @@
   { "name": "fixed_bn",          "value": "সমস্যাটি সমাধান করা হয়েছে। চেক করে জানান।",                               "color": "#10b981", "label": "Issue Fixed",   "icon": "✅", "group": "Fix"      },
   
   { "name": "escalate_en",       "value": "I'm escalating this issue to our technical team. We'll update you shortly.",  "color": "#ef4444", "label": "Escalate",      "icon": "🚨", "group": "Close"    },
-  { "name": "escalate_bn",       "value": "আমি বিষয়টি আমাদের টেকনিক্যাল টিমে পাঠাচ্ছি। শীঘ্রই আপডেট জানানো হবে।", "color": "#ef4444", "label": "Escalate",      "icon": "🚨", "group": "Close"    },
+  { "name": "escalate_bn",       "value": "আমি বিষয়টি আমাদের টেকনিক্যাল টিমের কাছে পাঠাচ্ছি। শীঘ্রই আপডেট জানানো হবে।", "color": "#ef4444", "label": "Escalate",      "icon": "🚨", "group": "Close"    },
 
   { "name": "closing_en",        "value": "Is there anything else I can help you with today?",                           "color": "#84cc16", "label": "Anything Else", "icon": "💬", "group": "Close"    },
-  { "name": "closing_bn",        "value": "আর কোনো বিষয়ে কি আমি আপনাকে সাহায্য করতে পারি?",                          "color": "#84cc16", "label": "Anything Else", "icon": "💬", "group": "Close"    },
+  { "name": "closing_bn",        "value": "আপনাকে আর কোনো তথ্য দিয়ে সহযোগিতা করতে পারি?",                          "color": "#84cc16", "label": "Anything Else", "icon": "💬", "group": "Close"    },
 
   { "name": "bye_en",            "value": "Thank you for contacting us. Have a great day!",                              "color": "#65a30d", "label": "Goodbye",       "icon": "👍", "group": "Close"    },
-  { "name": "bye_bn",            "value": "আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। আপনার দিনটি শুভ হোক!",             "color": "#65a30d", "label": "Goodbye",       "icon": "👍", "group": "Close"    }
+  { "name": "bye_bn",            "value": "আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। আপনার দিনটি শুভ হোক।",             "color": "#65a30d", "label": "Goodbye",       "icon": "👍", "group": "Close"    }
 ]
