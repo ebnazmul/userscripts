@@ -12,8 +12,8 @@
     'use strict';
 
     const INPUT_SEL = `textarea[placeholder="Type your message here"]`;
-    const TMPL_URL  = "https://raw.githubusercontent.com/ebnazmul/userscripts/refs/heads/master/templates.js";
-
+    const TMPL_URL  = "https://raw.githubusercontent.com/ebnazmul/userscripts/refs/heads/master/tawk-to-and-anychat-helper/templates.js";
+    
     let templates = [];
     let lang      = "en";
     let open      = false;
