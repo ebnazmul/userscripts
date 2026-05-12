@@ -1,6 +1,6 @@
 [
   { "name": "hi_en",             "value": "Hello there, welcome to our live chat support! How can I help you today?",         "color": "#4f8ef7", "label": "Hello",         "icon": "👋", "group": "Greeting" },
-  { "name": "hi_bn",             "value": "হ্যালো, আমাদের চ্যাট সাপোর্টে আপনাকে স্বাগতম। আপনাকে কিভাবে সাহায্য করতে পারি?", "color": "#e0634a", "label": "Hello",         "icon": "👋", "group": "Greeting" },
+  { "name": "hi_bn",             "value": "হ্যালো, আমাদের লাইভ চ্যাট সাপোর্টে আপনাকে স্বাগতম। আপনাকে কিভাবে সাহায্য করতে পারি?", "color": "#e0634a", "label": "Hello",         "icon": "👋", "group": "Greeting" },
 
   { "name": "ask_details_en",    "value": "Could you please provide more details about the issue?",                       "color": "#f59e0b", "label": "Ask Details",   "icon": "📋", "group": "Clarify"  },
   { "name": "ask_details_bn",    "value": "সমস্যাটি সম্পর্কে আরও বিস্তারিত জানান।",                                  "color": "#f59e0b", "label": "Ask Details",   "icon": "📋", "group": "Clarify"  },
