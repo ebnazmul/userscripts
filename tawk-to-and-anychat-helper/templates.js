@@ -1,8 +1,8 @@
 [
-  { "name": "hi_en",             "value": "Hello! Welcome to Hostever live chat support! How can I help you today?",         "color": "#4f8ef7", "label": "Hello",         "icon": "👋", "group": "Greeting" },
-  { "name": "hi_bn",             "value": "হ্যালো, Hostever লাইভ চ্যাট সাপোর্টে আপনাকে স্বাগতম। আপনাকে কিভাবে সাহায্য করতে পারি?", "color": "#e0634a", "label": "Hello",         "icon": "👋", "group": "Greeting" },
+  { "name": "hi_en",             "value": "Hello! Welcome to Hosteve live chat support! How can I help you today?",         "color": "#4f8ef7", "label": "Hello",         "icon": "👋", "group": "Greeting" },
+  { "name": "hi_bn",             "value": "হ্যালো, আপনাকে কিভাবে সাহায্য করতে পারি?", "color": "#e0634a", "label": "Hello",         "icon": "👋", "group": "Greeting" },
 
-  { "name": "ask_details_en",    "value": "Could you please provide more details about the issue?",                       "color": "#f59e0b", "label": "Ask Details",   "icon": "📋", "group": "Clarify"  },
+  { "name": "ask_details_en",    "value": "Please provide more details about the issue.",                       "color": "#f59e0b", "label": "Ask Details",   "icon": "📋", "group": "Clarify"  },
   { "name": "ask_details_bn",    "value": "সমস্যাটি সম্পর্কে আরও বিস্তারিত জানান।",                                  "color": "#f59e0b", "label": "Ask Details",   "icon": "📋", "group": "Clarify"  },
 
   { "name": "ask_screenshot_en", "value": "Please share a screenshot of the issue.",                             "color": "#f97316", "label": "Screenshot",    "icon": "📷", "group": "Clarify"  },
@@ -12,8 +12,10 @@
   { "name": "hold_bn",           "value": "চেক করছি। সময় দিয়ে সহযোগিতা করুন।",                                    "color": "#16a34a", "label": "Hold On",       "icon": "⏸", "group": "Status"   },
 
   { "name": "wait_en",           "value": "Thanks for your patience. I'm looking into this right now.",                  "color": "#22c55e", "label": "Still Looking", "icon": "🔍", "group": "Status"   },
-  { "name": "wait_bn",           "value": "আমি বিষয়টি এখনও দেখছি। আরও কিছুক্ষন সময় দিয়ে সহযোগিতা করুন।",           "color": "#22c55e", "label": "Still Looking", "icon": "🔍", "group": "Status"   },
+  { "name": "wait_bn",           "value": "সময় দিয়ে সহযোগিতা করুন।",           "color": "#22c55e", "label": "Still Looking", "icon": "🔍", "group": "Status"   },
 
+  { "name": "domain_renewal_en", "value": "After renewing an expired domain, it may take up to 24 hours for the domain to become active again.", "color": "#22c55e", "label": "Domain Renewal", "icon": "🌐", "group": "Status" },
+  { "name": "domain_renewal_bn", "value": "ডোমেইন এর মেয়াদ শেষ হবার পর রিনিউ করলে ডোমেইনটি পুনরায় এক্টিভ হতে ২৪ ঘন্টা পর্যন্ত সময় লাগতে পারে।", "color": "#22c55e", "label": "Domain Renewal", "icon": "🌐", "group": "Status" },
   { "name": "clear_cache_en",    "value": "Please try clearing your browser cache or use an incognito window.",          "color": "#0ea5e9", "label": "Clear Cache",   "icon": "🧹", "group": "Fix"      },
   { "name": "clear_cache_bn",    "value": "ব্রাউজারের ক্যাশ ক্লিয়ার করে অথবা ইনকগনিটো মোডে আবার চেষ্টা করুন।",     "color": "#0ea5e9", "label": "Clear Cache",   "icon": "🧹", "group": "Fix"      },
 
